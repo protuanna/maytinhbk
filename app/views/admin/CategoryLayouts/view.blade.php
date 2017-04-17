@@ -17,21 +17,25 @@
                     {{ Form::open(array('method' => 'GET', 'role'=>'form')) }}
                     <div class="panel-body">
                         <div class="form-group col-sm-3">
-                            <label for="product_id"><i>ID sản phẩm</i></label>
-                            <input type="text" class="form-control input-sm" id="product_id" name="product_id"  placeholder="id sản phẩm" @if(isset($search['product_id']) && $search['product_id'] != '')value="{{$search['product_id']}}"@endif>
+                            <label for="category_id"><i>ID danh mục</i></label>
+                            <input type="text" class="form-control input-sm" id="category_id" name="category_id"  placeholder="id danh mục" @if(isset($search['category_id']) && $search['category_id'] != '')value="{{$search['category_id']}}"@endif>
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="product_id"><i>Mã sản phẩm</i></label>
-                            <input type="text" class="form-control input-sm" id="product_code" name="product_code"  placeholder="mã sản phẩm" @if(isset($search['product_code']) && $search['product_code'] != '')value="{{$search['product_code']}}"@endif>
+                            <label for="category_name"><i>Tên danh mục</i></label>
+                            <input type="text" class="form-control input-sm" id="category_name" name="category_name"  placeholder="Tên danh mục" @if(isset($search['category_name']) && $search['category_name'] != '')value="{{$search['category_name']}}"@endif>
                         </div>
                         <div class="form-group col-sm-3">
-                            <label for="product_name"><i>Tên sản phẩm</i></label>
-                            <input type="text" class="form-control input-sm" id="product_name" name="product_name"  placeholder="Tên sản phẩm" @if(isset($search['product_name']) && $search['product_name'] != '')value="{{$search['product_name']}}"@endif>
+                            <label for="category_status"><i>Trạng thái</i></label>
+                            <select name="category_status" id="category_status" class="form-control input-sm">
+                                @foreach($aryStatus as $k => $v)
+                                <option value="{{$k}}">{{$v}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="panel-footer text-right">
                         <span class="">
-                            <a class="btn btn-danger btn-sm" href="{{URL::route('admin.product_edit')}}">
+                            <a class="btn btn-danger btn-sm" href="{{URL::route('admin.category_edit')}}">
                                 <i class="ace-icon fa fa-plus-circle"></i>
                                 Thêm mới
                             </a>
@@ -43,35 +47,30 @@
                     {{ Form::close() }}
                 </div>
                 @if(sizeof($data) > 0)
-                    <div class="span clearfix"> @if($total >0) Có tổng số <b>{{$total}}</b> sản phẩm @endif </div>
-                    <br>
                     <table class="table table-bordered table-hover dataTable">
                         <thead class="thin-border-bottom">
                         <tr class="">
-                            <th width="5%" class="text-center">STT</th>
-                            <th width="5%" class="text-center">ID</th>
-                            <th width="60%">Sản phẩm</th>
-                            <th width="10%" class="text-right">Giá</th>
-                            <th width="10%" class="text-center"></th>
+                            <th width="10%" class="text-center">STT</th>
+                            <th width="10%" class="text-center">ID</th>
+                            <th width="40%">Danh mục</th>
+                            <th width="20%" class="text-right">Trạng thái</th>
+                            <th width="20%" class="text-center"></th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach ($data as $key => $item)
                             <tr>
-                                <td class="text-center">{{ $stt + $key+1 }}</td>
-                                <td>{{ $item['product_id'] }}</td>
-                                <td>{{ $item['product_name'] }}</td>
-                                <td class="text-right">{{number_format($item['product_price'],0,'.','.')}} đ</td>
+                                <td class="text-center">{{ $key+1 }}</td>
+                                <td>{{ $item['category_id'] }}</td>
+                                <td class="text-left">{{ $item['category_name'] }}</td>
+                                <td class="text-center">{{$aryStatus[$item['category_status']]}} đ</td>
                                 <td class="text-center">
-                                    <a href="{{URL::route('admin.product_edit',array('id' => $item['product_id']))}}" title="Sửa item"><i class="fa fa-edit"></i></a>
+                                    <a href="{{URL::route('admin.category_edit',array('id' => $item['category_id']))}}" title="Sửa item"><i class="fa fa-edit"></i></a>
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                    <div class="text-right">
-                        {{$paging}}
-                    </div>
                 @else
                     <div class="alert">
                         Không có dữ liệu

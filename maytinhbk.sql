@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2017-04-15 17:53:03
+Date: 2017-04-17 17:29:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -47,9 +47,10 @@ CREATE TABLE `product` (
   `product_policy` varchar(255) DEFAULT NULL,
   `product_promotion` varchar(500) DEFAULT NULL,
   `product_content` longtext,
+  `product_tech` longtext,
   `product_price` int(11) DEFAULT '0',
   PRIMARY KEY (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of product
@@ -79,5 +80,5 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('21', 'admin', '838f8990de894d847a038acefb153eb3', 'Admin', '1', '1492246195', '127.0.0.1', null, null, '21', 'admin', null, '1488084456');
+INSERT INTO `user` VALUES ('21', 'admin', '838f8990de894d847a038acefb153eb3', 'Admin', '1', '1492421269', '127.0.0.1', null, null, '21', 'admin', null, '1488084456');
 INSERT INTO `user` VALUES ('22', 'tuanna', '86089abba846534bc77c42e32a2d4eb0', 'Tuấn Nguyễn Anh', '1', '1492246181', '127.0.0.1', '21', 'admin', '21', 'admin', '1492245899', '1492245964');

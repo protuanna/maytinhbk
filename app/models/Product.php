@@ -2,10 +2,9 @@
 
 /**
  * Created by JetBrains PhpStorm.
- * User: Quynhtm
- * Date: 6/21/14
+ * User: PC0353
+ * Date: 4/17/2017
  * Time: 12:37 PM
- * To change this template use File | Settings | File Templates.
  */
 class Product extends Eloquent
 {
@@ -26,6 +25,9 @@ class Product extends Eloquent
             if (isset($dataSearch['product_id']) && sizeof($dataSearch['product_id']) > 0) {
                 $query->whereIn('product_id', $dataSearch['product_id']);
             }
+            if (isset($dataSearch['product_code']) && sizeof($dataSearch['product_code']) > 0) {
+                $query->whereIn('product_code', $dataSearch['product_code']);
+            }
             $total = $query->count();
             $query->orderBy('product_id', 'desc');
             return $query->take($limit)->skip($offset)->get();
@@ -34,7 +36,6 @@ class Product extends Eloquent
             throw new PDOException();
         }
     }
-
 
     public static function add($dataInput)
     {
@@ -114,66 +115,5 @@ class Product extends Eloquent
             throw new PDOException();
         }
     }
-
-    public static function getProductRelate($c_ids,$p_ids){
-        try {
-            //$product = Product::find($id);
-            $query = Product::whereIn('product_Category',$c_ids);
-            $query->where('product_Status', 1);
-            $query->where('product_show_site', 1);
-            $query->whereNotIn('product_id', $p_ids);
-            //$query->where('product_NameUnit','LIKE','%'.$product->product_NameUnit.'%');
-            return $query->take(8)->get();
-        } catch (PDOException $e) {
-            throw new PDOException();
-        }
-    }
-
-    public static function getProductHome(){
-        try {
-            $query = Product::where('product_status', 1);
-            return $query->get();
-        } catch (PDOException $e) {
-            throw new PDOException();
-        }
-    }
-
-    public static function getProductByIds($ids)
-    {
-        try {
-            $query = Product::whereIn('product_id', $ids);
-            $query->where('product_Status', 1);
-            $query->where('product_show_site', 1);
-            return $query->get();
-        } catch (PDOException $e) {
-            throw new PDOException();
-        }
-    }
-
-    public static function getListCateByIds($ids)
-    {
-        try {
-            $query = Product::whereIn('product_id', $ids);
-            $query->where('product_Status', 1);
-            $query->where('product_show_site', 1);
-            return $query->lists('product_Category');
-        } catch (PDOException $e) {
-            throw new PDOException();
-        }
-    }
-
-    public static function getProductKm()
-    {
-        try {
-            $query = Product::where('product_Status', 1);
-            $query->where('product_show_site', 1);
-            $query->where('product_landing_start', '<=', time());
-            $query->where('product_landing_end', '>=', time());
-            return $query->get();
-        } catch (PDOException $e) {
-            throw new PDOException();
-        }
-    }
-
 
 }

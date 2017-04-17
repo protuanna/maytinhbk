@@ -35,5 +35,8 @@ Route::group(array('prefix' => 'admin', 'before' => ''), function () {
     Route::get('product/view', array('as' => 'admin.product_list', 'uses' => 'ProductController@index'));
     Route::get('product/getCreate/{id?}', array('as' => 'admin.product_edit', 'uses' => 'ProductController@getCreate'));
     Route::post('product/getCreate/{id?}', array('as' => 'admin.product_edit_post', 'uses' => 'ProductController@postCreate'));
-    Route::post('product/deleteItem', array('as' => 'admin.deltete_product_post', 'uses' => 'ProductController@deleteItem'));
+    /*****************************quản lý danh mục*********************/
+    Route::get('category/view', array('as' => 'admin.category_list', 'uses' => 'CategoryController@index'));
+    Route::get('category/getCreate/{id?}', array('as' => 'admin.category_edit', 'uses' => 'CategoryController@getCreate'));
+    Route::post('category/getCreate/{id?}', array('as' => 'admin.category_edit_post', 'uses' => 'CategoryController@postCreate'));
 });
