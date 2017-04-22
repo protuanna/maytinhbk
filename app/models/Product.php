@@ -14,7 +14,7 @@ class Product extends Eloquent
 
     public $timestamps = false;
 
-    protected $fillable = array('product_name', 'product_code', 'product_status', 'product_store', 'category_id', 'product_avatar', 'product_image', 'product_policy', 'product_promotion', 'product_content','product_price');
+    protected $fillable = array('product_name', 'product_code', 'product_status', 'product_store', 'category_id', 'product_avatar', 'product_image', 'product_policy', 'product_promotion', 'product_content','product_price','product_home');
 
     public static function searchByCondition($dataSearch = array(), $limit =0, $offset=0, &$total){
         try{
@@ -27,6 +27,15 @@ class Product extends Eloquent
             }
             if (isset($dataSearch['product_code']) && sizeof($dataSearch['product_code']) > 0) {
                 $query->whereIn('product_code', $dataSearch['product_code']);
+            }
+            if (isset($dataSearch['category_id']) && sizeof($dataSearch['category_id']) > 0) {
+                $query->whereIn('category_id', $dataSearch['category_id']);
+            }
+            if (isset($dataSearch['product_home']) && $dataSearch['product_home'] >= 0) {
+                $query->where('product_home', $dataSearch['product_home']);
+            }
+            if (isset($dataSearch['product_status']) && $dataSearch['product_status'] >= 0) {
+                $query->where('product_status', $dataSearch['product_status']);
             }
             $total = $query->count();
             $query->orderBy('product_id', 'desc');
@@ -47,12 +56,9 @@ class Product extends Eloquent
                     $data->$k = $v;
                 }
             }
-            if ($data->save()) {
-                DB::connection()->getPdo()->commit();
-                return $data->product_id;
-            }
+            $data->save();
             DB::connection()->getPdo()->commit();
-            return false;
+            return $data->product_id;
         } catch (PDOException $e) {
             DB::connection()->getPdo()->rollBack();
             throw new PDOException();

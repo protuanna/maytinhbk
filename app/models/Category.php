@@ -19,7 +19,7 @@ class Category extends Eloquent
     public static function searchByCondition($dataSearch = array(), &$total)
     {
         try {
-            $query = Product::where('category_id', '>', 0);
+            $query = Category::where('category_id', '>', 0);
             if (isset($dataSearch['category_name']) && $dataSearch['category_name'] != '') {
                 $query->where('category_name', 'LIKE', '%' . $dataSearch['category_name'] . '%');
             }
@@ -30,7 +30,7 @@ class Category extends Eloquent
                 $query->where('category_status', $dataSearch['category_status']);
             }
             $total = $query->count();
-            $query->orderBy('product_id', 'desc');
+            $query->orderBy('category_parent_id', 'asc');
             return $query->get();
         } catch (PDOException $e) {
             throw new PDOException();
@@ -41,18 +41,15 @@ class Category extends Eloquent
     {
         try {
             DB::connection()->getPdo()->beginTransaction();
-            $data = new Product();
+            $data = new Category();
             if (is_array($dataInput) && count($dataInput) > 0) {
                 foreach ($dataInput as $k => $v) {
                     $data->$k = $v;
                 }
             }
-            if ($data->save()) {
-                DB::connection()->getPdo()->commit();
-                return $data->product_id;
-            }
+            $data->save();
             DB::connection()->getPdo()->commit();
-            return false;
+            return $data->category_id;
         } catch (PDOException $e) {
             DB::connection()->getPdo()->rollBack();
             throw new PDOException();
@@ -63,8 +60,8 @@ class Category extends Eloquent
     {
         try {
             DB::connection()->getPdo()->beginTransaction();
-            $dataSave = Product::find($id);
-            if (!empty($dataInput)) {
+            $dataSave = Category::find($id);
+            if ($dataInput) {
                 $dataSave->update($dataInput);
             }
             DB::connection()->getPdo()->commit();
@@ -79,12 +76,29 @@ class Category extends Eloquent
     {
         try {
             DB::connection()->getPdo()->beginTransaction();
-            $dataSave = Product::find($id);
+            $dataSave = Category::find($id);
             $dataSave->delete();
             DB::connection()->getPdo()->commit();
             return true;
         } catch (PDOException $e) {
             DB::connection()->getPdo()->rollBack();
+            throw new PDOException();
+        }
+    }
+
+    public static function getAllShow(){
+        try {
+            return Category::where('category_status',1)->get();
+        } catch (PDOException $e) {
+            throw new PDOException();
+        }
+    }
+
+    public static function getListAll()
+    {
+        try {
+            return Category::lists('category_name', 'category_id');
+        } catch (PDOException $e) {
             throw new PDOException();
         }
     }

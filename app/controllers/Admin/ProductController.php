@@ -24,15 +24,24 @@ class ProductController extends BaseAdminController
         $search['product_name'] = Request::get('product_name', '');
         $search['product_code'] = Request::get('product_code', '');
         $search['product_id'] = Request::get('product_id', '');
+        $search['category_id'] = (int)Request::get('category_id', 0);
+        $search['product_home'] = (int)Request::get('product_home', -1);
+        $search['product_status'] = (int)Request::get('product_status', -1);
         $param = $search;
+        $child = $this->getAllChild($search['category_id']);
+        $param['category_id'] = $child;
         $param['product_id'] = ($param['product_id'] != '') ? explode(',',$param['product_id']) : array();
         $param['product_code'] = ($param['product_code'] != '') ? explode(',',$param['product_code']) : array();
         $dataSearch = Product::searchByCondition($param, $limit, $offset, $total);
         $paging = $total > 0 ? Pagging::getNewPager(3, $pageNo, $total, $limit, $search) : '';
+        $category = Category::getListAll();
+        $option = $this->navCategory($search['category_id']);
         $this->layout->content = View::make('admin.ProductLayouts.view')
             ->with('paging', $paging)
             ->with('stt', ($pageNo - 1) * $limit)
+            ->with('option', $option)
             ->with('total', $total)
+            ->with('category', $category)
             ->with('data', $dataSearch)
             ->with('search', $search);
     }
@@ -43,21 +52,35 @@ class ProductController extends BaseAdminController
         if ($id > 0) {
             $data = Product::find($id);
         }
+        $active_id = $data ? $data['category_id'] : 0;
+        $option = $this->navCategory($active_id);
         $this->layout->content = View::make('admin.ProductLayouts.add')
             ->with('id', $id)
+            ->with('option', $option)
             ->with('data', $data);
     }
 
     public function postCreate($id = 0)
     {
 
-        $dataSave['product_name'] = Request::get('product_name');
-        $dataSave['product_code'] = Request::get('product_code');
-        $product_price = Request::get('product_price');
+        $dataSave['product_name'] = Request::get('product_name', '');
+        $dataSave['product_code'] = Request::get('product_code', '');
+        $dataSave['product_promotion'] = Request::get('product_promotion', '');
+        $dataSave['product_policy'] = Request::get('product_policy', '');
+        $product_price = Request::get('product_price', '');
         $dataSave['product_price'] =  (int)str_replace('.','',$product_price);
-        $dataSave['product_status'] = (int)Request::get('product_status');
-        $dataSave['product_content'] = htmlspecialchars(trim(Request::get('product_content')));
-        $dataSave['product_tech'] = htmlspecialchars(trim(Request::get('product_tech')));
+        $dataSave['product_status'] = (int)Request::get('product_status', 0);
+        $dataSave['product_store'] = (int)Request::get('product_store', 0);
+        $dataSave['category_id'] = (int)Request::get('category_id', 0);
+        $dataSave['product_content'] = htmlspecialchars(trim(Request::get('product_content', '')));
+        $dataSave['product_tech'] = htmlspecialchars(trim(Request::get('product_tech', '')));
+        $error = array();
+        if($dataSave['product_name'] == ''){
+            $error[] = 'Chưa nhập tên sản phẩm';
+        }
+        if($dataSave['category_id'] == 0){
+            $error[] = 'Chưa chọn danh mục';
+        }
         $file = $files = null;
         if ( Input::hasFile('product_avatar')) {
             $file = Input::file('product_avatar');
@@ -81,7 +104,7 @@ class ProductController extends BaseAdminController
         if($error_image == 1){
             $error[] = 'Ảnh sản phẩm không hợp lệ';
         }
-        if ($this->valid($dataSave, $id) && empty($this->error)) {
+        if (!$error) {
             if ($file) {
                 $name = time() . '-av-' . $file->getClientOriginalName();
                 $file->move(Constant::dir_product, $name);
@@ -113,12 +136,14 @@ class ProductController extends BaseAdminController
             $pro = Product::find($id);
             $dataSave['product_image'] = $pro['product_image'];
             $dataSave['product_avatar'] = $pro['product_avatar'];
-            $dataSave['product_avatar_hover'] = $pro['product_avatar_hover'];
         }
+        $active_id = $dataSave ? $dataSave['category_id'] : 0;
+        $option = $this->navCategory($active_id);
         $this->layout->content = View::make('admin.ProductLayouts.add')
             ->with('id', $id)
+            ->with('option', $option)
             ->with('data', $dataSave)
-            ->with('error', $this->error);
+            ->with('error', $error);
     }
 
 }

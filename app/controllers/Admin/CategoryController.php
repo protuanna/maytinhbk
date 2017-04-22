@@ -26,9 +26,11 @@ class CategoryController extends BaseAdminController
         $param = $search;
         $param['category_id'] = ($param['category_id'] != '') ? explode(',',$param['category_id']) : array();
         $dataSearch = Category::searchByCondition($param,$total);
+        $category = Category::getListAll();
         $this->layout->content = View::make('admin.CategoryLayouts.view')
             ->with('total', $total)
             ->with('aryStatus', $this->aryStatus)
+            ->with('category', $category)
             ->with('data', $dataSearch)
             ->with('search', $search);
     }
@@ -37,10 +39,13 @@ class CategoryController extends BaseAdminController
     {
         $data = array();
         if ($id > 0) {
-            $data = Product::find($id);
+            $data = Category::find($id);
         }
+        $active_id = $data ? $data['category_parent_id'] : 0;
+        $option = $this->navCategory($active_id);
         $this->layout->content = View::make('admin.CategoryLayouts.add')
             ->with('id', $id)
+            ->with('option', $option)
             ->with('data', $data);
     }
 
@@ -49,24 +54,26 @@ class CategoryController extends BaseAdminController
         $error = array();
         $dataSave['category_name'] = Request::get('category_name', '');
         $dataSave['category_parent_id'] = (int)Request::get('category_parent_id', 0);
-        $dataSave['category_status'] = (int)Request::get('category_status', -1);
+        $dataSave['category_status'] = (int)Request::get('category_status', 0);
         if($dataSave['category_name'] == ''){
             $error[] = 'Chưa nhập tên danh mục';
         }
         if(!$error){
             if ($id > 0) {
-                if (Product::updData($id, $dataSave)) {
+                if (Category::updData($id, $dataSave)) {
                     return Redirect::route('admin.category_list');
                 }
             } else {
-                if (Product::add($dataSave)) {
+                if (Category::add($dataSave)) {
                     return Redirect::route('admin.category_list');
                 }
             }
         }
+        $option = $this->navCategory($id);
         $this->layout->content = View::make('admin.CategoryLayouts.add')
             ->with('id', $id)
             ->with('data', $dataSave)
+            ->with('option', $option)
             ->with('error', $error);
     }
 }

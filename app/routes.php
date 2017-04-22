@@ -39,4 +39,12 @@ Route::group(array('prefix' => 'admin', 'before' => ''), function () {
     Route::get('category/view', array('as' => 'admin.category_list', 'uses' => 'CategoryController@index'));
     Route::get('category/getCreate/{id?}', array('as' => 'admin.category_edit', 'uses' => 'CategoryController@getCreate'));
     Route::post('category/getCreate/{id?}', array('as' => 'admin.category_edit_post', 'uses' => 'CategoryController@postCreate'));
+    /*****************************quản lý bài viết*********************/
+    Route::get('news/view', array('as' => 'admin.news_list', 'uses' => 'NewsController@index'));
+    Route::get('news/getCreate/{id?}', array('as' => 'admin.news_edit', 'uses' => 'NewsController@getCreate'));
+    Route::post('news/getCreate/{id?}', array('as' => 'admin.news_edit_post', 'uses' => 'NewsController@postCreate'));
+    /*****************************quản lý bài viết*********************/
+    Route::get('topic/view', array('as' => 'admin.topic_list', 'uses' => 'TopicController@index'));
+    Route::get('topic/getCreate/{id?}', array('as' => 'admin.topic_edit', 'uses' => 'TopicController@getCreate'));
+    Route::post('topic/getCreate/{id?}', array('as' => 'admin.topic_edit_post', 'uses' => 'TopicController@postCreate'));
 });

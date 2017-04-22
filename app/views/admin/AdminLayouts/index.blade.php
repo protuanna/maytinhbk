@@ -135,12 +135,39 @@
                 </a>
                 <b class="arrow"></b>
             </li>
-            <li class="@if(Route::currentRouteName() == 'admin.user_view')active @endif">
+            <li class="@if(Route::currentRouteName() == 'admin.user_view' || Route::currentRouteName() == 'admin.user_create' || Route::currentRouteName() == 'admin.user_edit' || Route::currentRouteName() == 'admin.user_change' || Route::currentRouteName() == 'admin.user_remove')active @endif">
                 <a href="{{URL::route('admin.user_view')}}">
                     <i class="menu-icon fa fa-user"></i>
                     <span class="menu-text"> Quản trị tài khoản</span>
                 </a>
                 <b class="arrow"></b>
+            </li>
+            <li class="@if(Route::currentRouteName() == 'admin.category_list' || Route::currentRouteName() == 'admin.product_list' || Route::currentRouteName() == 'admin.product_edit' || Route::currentRouteName() == 'admin.category_edit')active @endif">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-laptop"></i>
+                    <span class="menu-text"> Quản trị sản phẩm</span>
+
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu  nav-show ">
+                    <li class="@if(Route::currentRouteName() == 'admin.category_list' || Route::currentRouteName() == 'admin.category_edit')active @endif">
+                        <a href="{{URL::route('admin.category_list')}}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Danh mục
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="@if(Route::currentRouteName() == 'admin.product_list' || Route::currentRouteName() == 'admin.product_edit')active @endif">
+                        <a href="{{URL::route('admin.product_list')}}">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Sản phẩm
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
             </li>
         </ul><!-- /.nav-list -->
 

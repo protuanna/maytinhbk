@@ -5,7 +5,7 @@
                 <i class="ace-icon fa fa-home home-icon"></i>
                 <a href="{{URL::route('admin.dashboard')}}">Home</a>
             </li>
-            <li class="active">Danh sách Sản phẩm</li>
+            <li class="active">Danh sách danh mục</li>
         </ul><!-- /.breadcrumb -->
     </div>
 
@@ -52,9 +52,10 @@
                         <tr class="">
                             <th width="10%" class="text-center">STT</th>
                             <th width="10%" class="text-center">ID</th>
-                            <th width="40%">Danh mục</th>
-                            <th width="20%" class="text-right">Trạng thái</th>
-                            <th width="20%" class="text-center"></th>
+                            <th width="25%">Danh mục</th>
+                            <th width="25%">Danh mục cha</th>
+                            <th width="15%" class="text-right">Trạng thái</th>
+                            <th width="10%" class="text-center"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -63,7 +64,8 @@
                                 <td class="text-center">{{ $key+1 }}</td>
                                 <td>{{ $item['category_id'] }}</td>
                                 <td class="text-left">{{ $item['category_name'] }}</td>
-                                <td class="text-center">{{$aryStatus[$item['category_status']]}} đ</td>
+                                <td class="text-left">{{ $item['category_parent_id'] ? $category[$item['category_parent_id']] : '--' }}</td>
+                                <td class="text-center">{{$aryStatus[$item['category_status']]}}</td>
                                 <td class="text-center">
                                     <a href="{{URL::route('admin.category_edit',array('id' => $item['category_id']))}}" title="Sửa item"><i class="fa fa-edit"></i></a>
                                 </td>

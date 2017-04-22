@@ -22,11 +22,18 @@
                         @endforeach
                     </div>
                 @endif
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-3">
                     <label for="product_name"><i>Tên sản phẩm</i><span style="color: red"> *</span></label>
                     <input type="text" placeholder="Tên sản phẩm" id="product_name" name="product_name"
                            class="form-control input-sm"
                            value="@if(isset($data['product_name'])){{$data['product_name']}}@endif">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="category_id"><i>Danh mục</i></label>
+                    <select name="category_id" id="category_id" class="form-control input-sm">
+                        <option value="0" @if(isset($data['category_id']) && $data['category_id'] == 0) selected="selected" @endif>Danh mục</option>
+                        {{$option}}
+                    </select>
                 </div>
                 <div class="form-group col-sm-3">
                     <label for="product_price"><i>Giá</i></label>
@@ -35,11 +42,36 @@
                 <div class="form-group col-sm-3">
                     <label for="product_status"><i>Hiển thị trên site</i></label>
                     <select name="product_status" id="product_status" class="form-control input-sm">
-                        <option value="0" @if(isset($data['product_status']) && $data['product_status'] == 0) selected="selected" @endif>Ẩn</option>
                         <option value="1" @if(isset($data['product_status']) && $data['product_status'] == 1) selected="selected" @endif>Hiện</option>
+                        <option value="0" @if(isset($data['product_status']) && $data['product_status'] == 0) selected="selected" @endif>Ẩn</option>
                     </select>
                 </div>
                 <div class="form-group col-sm-3">
+                    <label for="product_code"><i>Mã sản phẩm</i></label>
+                    <input type="text" placeholder="Mã sản phẩm" id="product_code" name="product_code"
+                           class="form-control input-sm"
+                           value="@if(isset($data['product_code'])){{$data['product_code']}}@endif">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="product_policy"><i>Thời gian bảo hành</i></label>
+                    <input type="text" placeholder="Thời gian bảo hành" id="product_policy" name="product_policy"
+                           class="form-control input-sm"
+                           value="@if(isset($data['product_policy'])){{$data['product_policy']}}@endif">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="product_promotion"><i>Khuyến mãi</i></label>
+                    <input type="text" placeholder="Khuyễn mãi" id="product_promotion" name="product_promotion"
+                           class="form-control input-sm"
+                           value="@if(isset($data['product_promotion'])){{$data['product_promotion']}}@endif">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="product_store"><i>Tình trạng</i></label>
+                    <select name="product_store" id="product_store" class="form-control input-sm">
+                        <option value="1" @if(isset($data['product_store']) && $data['product_store'] == 1) selected="selected" @endif>Còn hàng</option>
+                        <option value="0" @if(isset($data['product_store']) && $data['product_store'] == 0) selected="selected" @endif>Hết hàng</option>
+                    </select>
+                </div>
+                <div class="form-group col-sm-6">
                     <label>Ảnh đại diện</label>
                     <div class="clearfix"></div>
                     <label class="ace-file-input">
@@ -63,32 +95,8 @@
                     @endif
                 </div>
 
-                <div class="form-group col-sm-3">
-                    <label>Ảnh hover</label>
-                    <div class="clearfix"></div>
-                    <label class="ace-file-input">
-                        <input type="file" id="product_avatar_hover" name="product_avatar_hover" accept="image/*">
-                        <span data-title="Chọn ảnh đại diện" class="ace-file-container"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <div style="width: 156px;height: 190px;padding: 2px;border: 1px solid gainsboro;display: none" class="product_avatar_hover_preview">
-                        <img src="" alt="" width="150" height="150">
-                        <div class="clearfix"></div>
-                        <div class="form-group">
-                            <button class="btn btn-sm btn-danger col-sm-12 product_avatar_hover_remove" type="button">
-                                <i class="ace-icon fa fa-remove bigger-110"></i> Hủy
-                            </button>
-                        </div>
-                    </div>
-                    @if(isset($data['product_avatar_hover']) && $data['product_avatar_hover'] != '')
-                        <div style="width: 156px;height: 156px;padding: 2px;border: 1px solid gainsboro" class="product_avatar_hover_old">
-                            <img src="{{Croppa::url(Constant::dir_product.$data['product_avatar_hover'], 150, 150)}}" alt="" width="150" height="150">
-                        </div>
-                    @endif
-                </div>
-
                 <div class="form-group col-sm-6">
-                    <label>Ảnh sản phẩm (Size <= 1mb. Ảnh : png,jpg,jpeg. Tỉ lệ 1:1)</label>
+                    <label>Ảnh sản phẩm</label>
                     <div class="clearfix"></div>
                     <label class="ace-file-input">
                         <input type="file" id="product_image" name="product_image[]"  accept="image/*" multiple>
@@ -108,19 +116,28 @@
                                     <div style="width: 156px;height: 156px;padding: 2px;margin: 2px;border: 1px solid gainsboro;float: left"><img src="{{Croppa::url(Constant::dir_product.$image, 150, 150)}}" alt="" width="150" height="150"></div>
                             @endforeach
                         </div>
-                        {{--<div style="width: 41px;height: 41px;padding: 2px;border: 1px solid gainsboro" class="product_avatar_old">
-                            <img src="{{Croppa::url(Constant::dir_product.$param['product_Avatar'], 35, 35)}}" alt="" width="35" height="35">
-                        </div>--}}
                     @endif
                 </div>
                 <div class="clearfix"></div>
                 <div class="col-sm-12">
+                    <label>Thông tin chi tiết</label>
+                    <div class="clearfix"></div>
                     <div class="wysiwyg-editor" id="editor1">
                         @if(isset($data['product_content']))
                             {{htmlspecialchars_decode($data['product_content'])}}
                         @endif
                     </div>
                     <input type="hidden" id="product_content" name="product_content" @if(isset($data['product_content'])) value="" @endif>
+                </div>
+                <div class="col-sm-12">
+                    <label>Thông số kỹ thuật</label>
+                    <div class="clearfix"></div>
+                    <div class="wysiwyg-editor" id="editor2">
+                        @if(isset($data['product_tech']))
+                            {{htmlspecialchars_decode($data['product_tech'])}}
+                        @endif
+                    </div>
+                    <input type="hidden" id="product_tech" name="product_tech" @if(isset($data['product_tech'])) value="" @endif>
                 </div>
                 <!-- PAGE CONTENT ENDS -->
                 <div class="clearfix space-6"></div>
@@ -152,7 +169,7 @@
             $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>'+
                 '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
         }
-        $('#editor1').ace_wysiwyg({
+        $('#editor1, #editor2').ace_wysiwyg({
             toolbar:
                 [
                     'font',
@@ -245,8 +262,9 @@
 
         $(".sys_save_product").on('click',function(){
             $("#product_content").val($("#editor1").html());
+            $("#product_tech").val($("#editor2").html());
             $('form').submit();
         });
     })
 </script>
-{{HTML::script('assets/admin/js/product.js');}}
+{{ HTML::script('assets/admin/js/product.js'); }}
